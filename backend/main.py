@@ -16,6 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "environment": os.getenv("RENDER", "local")}
+
 app.include_router(auth.router)
 app.include_router(services.router)
 app.include_router(ai.router)
