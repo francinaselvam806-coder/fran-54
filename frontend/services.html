@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Find Services - Hyperlocal Gig Finder</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b8c",
+                        "primary-dark": "#d61f7a",
+                        "background-light": "#ffffff",
+                        "background-dark": "#221019",
+                        "surface-light": "#f9fafb",
+                        "surface-dark": "#331d26",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#181114] dark:text-gray-100 overflow-x-hidden">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <!-- Navbar -->
+        <header
+            class="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-background-dark/95 backdrop-blur-sm">
+            <div class="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-4">
+                    <div class="size-8 text-primary">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold leading-tight tracking-tight dark:text-white">GigFinder</h2>
+                </a>
+                <div class="flex items-center gap-4">
+                    <div id="user-profile" class="hidden flex items-center gap-3">
+                        <span id="user-name" class="text-sm font-medium hidden sm:block"></span>
+                        <div id="user-img-container"
+                            class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
+                        </div>
+                    </div>
+                    <button id="logoutBtn"
+                        class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+                        <span class="material-symbols-outlined text-gray-600 dark:text-gray-300">logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full max-w-7xl mx-auto px-4 md:px-10 lg:px-40 py-10">
+            <div class="flex flex-col gap-8">
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight mb-2">Find Local Services</h1>
+                    <p class="text-gray-500">Discover students ready to help in your neighborhood.</p>
+                </div>
+
+                <!-- Backend Status Indicator -->
+                <div id="backendStatus"
+                    class="hidden mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">⚠️ Connection Error!</strong>
+                    <span class="block sm:inline">The AI Backend server is not reachable. Please ensure the terminal is
+                        running.</span>
+                </div>
+
+                <!-- AI Assistant Section -->
+                <!-- AI Assistant Section Removed -->
+
+                <!-- Search/Filters -->
+
+
+                <!-- Results -->
+                <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Results injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/main.js"></script>
+    <script src="assets/voice.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+
+        async function searchServices() {
+            try {
+                let position = null;
+                try {
+                    position = await getLocation();
+                } catch (e) { console.log("Location denied"); }
+
+                // Removed radius input, defaulting to 10km for now
+                const radius = 10000;
+
+                let url = `/services/search?lat=${position ? position.lat : 0}&lon=${position ? position.lon : 0}&radius=${radius}`;
+
+                const services = await getData(url);
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                if (services.length === 0) {
+                    resultsDiv.innerHTML = `<p class="col-span-full text-center text-gray-500 py-20">No services found in this area.</p>`;
+                    return;
+                }
+
+                services.forEach(service => {
+                    const div = document.createElement('div');
+                    div.className = 'bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col gap-4';
+
+                    const providerImg = service.provider_image ? `<img src="${service.provider_image}" class="w-full h-full object-cover rounded-full">` : `<span class="material-symbols-outlined text-gray-400">person</span>`;
+
+                    div.innerHTML = `
+                        <div onclick="window.location.href='service_details.html?id=${service._id}'" class="cursor-pointer">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden border border-gray-100 dark:border-gray-700">
+                                        ${providerImg}
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg leading-tight line-clamp-1 group-hover:text-primary transition-colors">${service.title}</h3>
+                                        <p class="text-xs text-primary font-bold uppercase tracking-wider">${service.category}</p>
+                                    </div>
+                                </div>
+                                <div class="text-xl font-black text-primary">$${service.price}</div>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed mt-4">${service.description}</p>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <span class="material-symbols-outlined text-base">location_on</span>
+                                    <span>${service.address || 'Address hidden'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="https://wa.me/${service.provider_phone ? service.provider_phone.replace(/[^0-9]/g, '') : ''}" target="_blank" 
+                                class="mt-2 w-full py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 relative z-10">
+                            <span class="material-symbols-outlined text-lg">chat</span>
+                            Chat on WhatsApp
+                        </a>
+                    `;
+                    resultsDiv.appendChild(div);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function revealContact(id, phone) {
+            const el = document.getElementById(`contact-${id}`);
+            if (el) {
+                el.classList.remove('hidden');
+                if (window.voiceAssistant && window.voiceAssistant.enabled) {
+                    window.voiceAssistant.speak(`The contact number is ${phone}`);
+                }
+            }
+        }
+
+        const MAIN_API = 'http://127.0.0.1:8000';
+
+
+        async function checkBackendHealth() {
+            try {
+                const res = await fetch(`${MAIN_API}/`);
+                if (res.ok) {
+                    document.getElementById('backendStatus').classList.add('hidden');
+                } else {
+                    throw new Error('Backend error');
+                }
+            } catch (e) {
+                console.error('Main Backend connection failed:', e);
+                document.getElementById('backendStatus').innerText = "⚠️ Main Backend Disconnected (Port 8000)";
+                document.getElementById('backendStatus').classList.remove('hidden');
+            }
+        }
+
+        // AI Functions Removed
+
+        // document.getElementById('searchBtn').addEventListener('click', searchServices);
+        window.addEventListener('load', () => {
+            searchServices();
+            checkBackendHealth();
+        });
+    </script>
+</body>
+
+</html>

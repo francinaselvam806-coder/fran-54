@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Service Details - GigFinder</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b8c",
+                        "primary-dark": "#d61f7a",
+                        "background-light": "#ffffff",
+                        "background-dark": "#221019",
+                        "surface-light": "#f9fafb",
+                        "surface-dark": "#331d26",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#181114] dark:text-gray-100 overflow-x-hidden">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <!-- Navbar -->
+        <header
+            class="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-background-dark/95 backdrop-blur-sm">
+            <div class="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-4">
+                    <div class="size-8 text-primary">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold leading-tight tracking-tight dark:text-white">GigFinder</h2>
+                </a>
+                <div class="flex items-center gap-6">
+                    <a href="ai_assistant.html"
+                        class="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary-dark transition-all">
+                        <span class="material-symbols-outlined text-[18px]">smart_toy</span>
+                        Back to AI
+                    </a>
+                    <button id="logoutBtn"
+                        class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+                        <span class="material-symbols-outlined text-gray-600 dark:text-gray-300">logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full max-w-5xl mx-auto px-4 md:px-10 py-10">
+            <div id="loading" class="text-center py-20">
+                <span class="material-symbols-outlined text-4xl animate-spin text-primary">sync</span>
+                <p class="mt-2 text-gray-500">Loading details...</p>
+            </div>
+
+            <div id="serviceDetails" class="hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Main Content -->
+                <div class="md:col-span-2 space-y-6">
+                    <div>
+                        <span id="sCategory"
+                            class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">--</span>
+                        <h1 id="sTitle"
+                            class="mt-2 text-3xl md:text-4xl font-black tracking-tight text-[#181114] dark:text-white">
+                            --</h1>
+                    </div>
+
+                    <div class="prose dark:prose-invert max-w-none">
+                        <h3 class="text-lg font-bold mb-2">Description</h3>
+                        <p id="sDescription"
+                            class="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">--</p>
+                    </div>
+
+                    <div class="border-t border-gray-100 dark:border-gray-800 pt-6">
+                        <h3 class="text-lg font-bold mb-4">Skills & Qualifications</h3>
+                        <div id="sSkills" class="flex flex-wrap gap-2 mb-4">
+                            <!-- Skills injected here -->
+                        </div>
+
+                        <div id="sCertificate"
+                            class="hidden bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800 flex items-start gap-3">
+                            <span class="material-symbols-outlined text-2xl">workspace_premium</span>
+                            <div>
+                                <p class="font-bold text-sm">GigFinder Verified Certificate</p>
+                                <p id="sCertText" class="text-xs mt-1">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-100 dark:border-gray-800 pt-6">
+                        <h3 class="text-lg font-bold mb-4">Location</h3>
+                        <div class="flex items-start gap-3 bg-gray-50 dark:bg-surface-dark p-4 rounded-xl">
+                            <span class="material-symbols-outlined text-red-500 mt-1">location_on</span>
+                            <div>
+                                <p id="sAddress" class="font-medium">--</p>
+                                <p class="text-sm text-gray-500">This service is provided locally.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="md:col-span-1">
+                    <div
+                        class="sticky top-24 bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 space-y-6">
+                        <div class="text-center pb-6 border-b border-gray-100 dark:border-gray-800">
+                            <div class="text-sm text-gray-500 mb-1">Price per service</div>
+                            <div id="sPrice" class="text-4xl font-black text-primary">$0</div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-sm text-gray-500 uppercase mb-4">Provider</h3>
+                            <div class="flex items-center gap-3">
+                                <div id="pImg"
+                                    class="size-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-gray-400">person</span>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="font-bold truncate">Student Provider</p>
+                                    <p class="text-xs text-green-600 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">verified</span> ID Verified
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a id="whatsappBtn" href="#" target="_blank"
+                            class="w-full py-4 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                            <span class="material-symbols-outlined text-xl">chat</span>
+                            Chat on WhatsApp
+                        </a>
+
+                        <p class="text-xs text-center text-gray-400">
+                            Safe & Secure • Direct Contact
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="hidden text-center py-20">
+                <span class="material-symbols-outlined text-4xl text-red-500 mb-2">error</span>
+                <p id="errorMsg" class="text-gray-800 dark:text-gray-200 font-bold">Service not found</p>
+                <a href="services.html" class="mt-4 inline-block text-primary hover:underline">Return to Services</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/main.js"></script>
+    <script src="assets/voice.js"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+
+        async function loadService() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (!id) {
+                showError("No service ID provided.");
+                return;
+            }
+
+            try {
+                const service = await getData(`/services/${id}`);
+                if (service.detail || !service._id) {
+                    throw new Error(service.detail || "Service not found");
+                }
+                renderService(service);
+            } catch (err) {
+                console.error(err);
+                showError("Could not load service details.");
+            }
+        }
+
+        function renderService(service) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('serviceDetails').classList.remove('hidden');
+
+            document.getElementById('sTitle').innerText = service.title;
+            document.getElementById('sCategory').innerText = service.category;
+            document.getElementById('sDescription').innerText = service.description;
+            // Handle newlines if needed, mostly pure text
+
+            document.getElementById('sAddress').innerText = service.address || "Location unavailable";
+            document.getElementById('sPrice').innerText = '$' + service.price;
+
+            // Render Skills
+            const skillsContainer = document.getElementById('sSkills');
+            skillsContainer.innerHTML = '';
+            if (service.skills && service.skills.length > 0) {
+                service.skills.forEach(skill => {
+                    const span = document.createElement('span');
+                    span.className = 'px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium';
+                    span.innerText = skill;
+                    skillsContainer.appendChild(span);
+                });
+            } else {
+                skillsContainer.innerHTML = '<span class="text-gray-400 text-sm italic">No specific skills listed</span>';
+            }
+
+            // Render Certificate
+            if (service.certificate) {
+                document.getElementById('sCertificate').classList.remove('hidden');
+                document.getElementById('sCertText').innerText = service.certificate;
+            } else {
+                document.getElementById('sCertificate').classList.add('hidden');
+            }
+
+            // Provider Image
+            if (service.provider_image) {
+                document.getElementById('pImg').innerHTML = `<img src="${service.provider_image}" class="w-full h-full object-cover">`;
+            }
+
+            // WhatsApp Link
+            const phone = service.provider_phone ? service.provider_phone.replace(/[^0-9]/g, '') : '';
+            const btn = document.getElementById('whatsappBtn');
+            if (phone) {
+                btn.href = `https://wa.me/${phone}`;
+            } else {
+                btn.classList.add('opacity-50', 'pointer-events-none');
+                btn.innerText = "No Phone Available";
+            }
+
+            if (window.voiceAssistant && window.voiceAssistant.enabled) {
+                window.voiceAssistant.speak(`Here are the details for ${service.title}. It costs $${service.price}.`);
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('errorMsg').innerText = msg;
+        }
+
+        window.addEventListener('load', loadService);
+    </script>
+</body>
+
+</html>

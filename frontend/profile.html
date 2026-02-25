@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Profile - Hyperlocal Gig Finder</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b8c",
+                        "primary-dark": "#d61f7a",
+                        "background-light": "#ffffff",
+                        "background-dark": "#221019",
+                        "surface-light": "#f9fafb",
+                        "surface-dark": "#331d26",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#181114] dark:text-gray-100 overflow-x-hidden">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <!-- Navbar -->
+        <header
+            class="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-background-dark/95 backdrop-blur-sm">
+            <div class="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-4">
+                    <div class="size-8 text-primary">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold leading-tight tracking-tight dark:text-white">GigFinder</h2>
+                </a>
+                <div class="flex items-center gap-4">
+                    <button id="logoutBtn"
+                        class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+                        <span class="material-symbols-outlined text-gray-600 dark:text-gray-300">logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full max-w-2xl mx-auto px-4 py-12">
+            <div
+                class="bg-white dark:bg-surface-dark rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+                <!-- Profile Header -->
+                <div class="h-32 bg-gradient-to-r from-primary to-primary-dark relative">
+                    <div class="absolute -bottom-12 left-8 p-1 bg-white dark:bg-surface-dark rounded-full">
+                        <div id="p-image-large"
+                            class="size-24 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-white dark:border-surface-dark flex items-center justify-center overflow-hidden">
+                            <span class="material-symbols-outlined text-4xl text-gray-300">person</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-16 pb-10 px-8">
+                    <div class="flex flex-col gap-6">
+                        <div>
+                            <h1 id="p-username" class="text-3xl font-black">User Name</h1>
+                            <p id="p-role" class="text-primary font-bold uppercase tracking-widest text-sm">Role</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-400 uppercase">Email</label>
+                                <div class="flex items-center gap-2 font-medium">
+                                    <span class="material-symbols-outlined text-gray-400">mail</span>
+                                    <span id="p-email">user@example.com</span>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-400 uppercase">Phone</label>
+                                <div class="flex items-center gap-2 font-medium">
+                                    <span class="material-symbols-outlined text-gray-400">call</span>
+                                    <span id="p-phone">+1 234 567 890</span>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2 space-y-1">
+                                <label class="text-xs font-bold text-gray-400 uppercase">Address</label>
+                                <div class="flex items-center gap-2 font-medium">
+                                    <span class="material-symbols-outlined text-gray-400">location_on</span>
+                                    <span id="p-address">123 Main St, City, Country</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-8 border-t border-gray-100 dark:border-gray-800">
+                            <button onclick="window.location.href='index.html'"
+                                class="px-6 py-2 border-2 border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary rounded-xl font-bold transition-all">
+                                Back to Home
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/main.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+
+        // Initialize Profile Data
+        document.getElementById('p-username').innerText = user.username;
+        document.getElementById('p-email').innerText = user.email;
+        document.getElementById('p-phone').innerText = user.phone || 'Not provided';
+        document.getElementById('p-address').innerText = user.address || 'Not provided';
+        document.getElementById('p-role').innerText = user.is_provider ? 'Student Provider' : 'Client';
+
+        if (user.profile_image) {
+            document.getElementById('p-image-large').innerHTML = `<img src="${user.profile_image}" class="w-full h-full object-cover">`;
+        }
+    </script>
+</body>
+
+</html>

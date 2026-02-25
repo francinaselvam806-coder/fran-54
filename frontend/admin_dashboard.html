@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Dashboard - GigFinder</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "admin-dark": "#1e1e2d",
+                        "admin-panel": "#2b2b40",
+                        "primary": "#3699ff", // Blue for Admin, distinct from Pink user app
+                        "success": "#1bc5bd",
+                        "danger": "#f64e60",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-admin-dark text-gray-300 font-display min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-admin-panel border-r border-white/5 flex flex-col fixed h-full z-10">
+        <div class="h-16 flex items-center justify-center border-b border-white/5">
+            <span class="text-xl font-bold text-white tracking-widest">GIG<span class="text-primary">ADMIN</span></span>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/5 text-primary rounded-lg font-medium">
+                <span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+            <a href="#users"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                <span class="material-symbols-outlined">group</span>
+                User Management
+            </a>
+            <a href="#services"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                <span class="material-symbols-outlined">design_services</span>
+                Services
+            </a>
+            <a href="index.html"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-gray-400 hover:text-white rounded-lg transition-colors mt-8 border-t border-white/5">
+                <span class="material-symbols-outlined">logout</span>
+                Back to Site
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="size-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">A
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-white">Admin User</p>
+                    <p class="text-xs text-green-400">Online</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-white">Dashboard Overview</h1>
+                <p class="text-gray-500 text-sm">Welcome back, Admin.</p>
+            </div>
+            <button onclick="refreshData()"
+                class="p-2 bg-admin-panel rounded-lg hover:bg-white/5 text-primary transition-colors">
+                <span class="material-symbols-outlined">refresh</span>
+            </button>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-admin-panel p-6 rounded-xl border border-white/5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 font-medium">Total Users</h3>
+                    <span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">group</span>
+                </div>
+                <div class="text-3xl font-bold text-white" id="stat-users">--</div>
+                <p class="text-xs text-green-400 mt-2">↑ Growing community</p>
+            </div>
+
+            <div class="bg-admin-panel p-6 rounded-xl border border-white/5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 font-medium">Active Services</h3>
+                    <span class="p-2 bg-success/10 text-success rounded-lg material-symbols-outlined">work</span>
+                </div>
+                <div class="text-3xl font-bold text-white" id="stat-services">--</div>
+                <p class="text-xs text-gray-500 mt-2">Services listed</p>
+            </div>
+
+            <div class="bg-admin-panel p-6 rounded-xl border border-white/5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 font-medium">Pending Approvals</h3>
+                    <span class="p-2 bg-danger/10 text-danger rounded-lg material-symbols-outlined">pending</span>
+                </div>
+                <div class="text-3xl font-bold text-white">0</div>
+                <p class="text-xs text-gray-500 mt-2">All up to date</p>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-admin-panel rounded-xl border border-white/5 overflow-hidden mb-8">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">User Management</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-black/20 text-xs uppercase text-gray-500 font-bold">
+                        <tr>
+                            <th class="px-6 py-4">User</th>
+                            <th class="px-6 py-4">Role</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 text-sm" id="users-table-body">
+                        <!-- Injected via JS -->
+                        <tr>
+                            <td colspan="4" class="px-6 py-8 text-center text-gray-500">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="assets/main.js"></script>
+    <script>
+        // Check for admin status
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        /* 
+           NOTE: In a real app, the backend API would return 401/403 and checking localStorage is not enough validation.
+           We are trusting the frontend state for MVP navigation only.
+        */
+        if (!currentUser || !currentUser.is_admin) {
+            // Uncomment below to enforce admin check strictly on frontend for demo
+            // alert("Access Denied: You are not an administrator.");
+            // window.location.href = 'index.html';
+        }
+
+        async function refreshData() {
+            try {
+                // 1. Get Stats
+                const stats = await getData('/admin/stats');
+                document.getElementById('stat-users').innerText = stats.total_users;
+                document.getElementById('stat-services').innerText = stats.total_services;
+
+                // 2. Get Users
+                const users = await getData('/admin/users');
+                const tbody = document.getElementById('users-table-body');
+
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">No users found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = users.map(u => `
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-medium text-white flex items-center gap-3">
+                            <div class="size-8 rounded-full bg-white/10 flex items-center justify-center text-xs overflow-hidden">
+                                ${u.profile_image ? `<img src="${u.profile_image}" class="w-full h-full object-cover">` : u.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div>${u.username}</div>
+                                <div class="text-xs text-gray-500">${u.email}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            ${u.is_admin ? '<span class="px-2 py-1 rounded bg-primary/20 text-primary text-xs font-bold">Admin</span>' : ''}
+                            ${u.is_provider ? '<span class="px-2 py-1 rounded bg-success/20 text-success text-xs font-bold">Student</span>' : '<span class="px-2 py-1 rounded bg-gray-700 text-gray-400 text-xs font-bold">Client</span>'}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded bg-success/10 text-success text-xs font-bold">Active</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                             ${!u.is_provider ? `
+                                <button onclick="verifyUser('${u._id}')" class="text-xs bg-white/5 hover:bg-success/20 hover:text-success text-gray-400 px-3 py-1.5 rounded transition-colors mr-2">
+                                    Promote to Student
+                                </button>
+                             ` : ''}
+                             <button onclick="deleteUser('${u._id}')" class="text-xs bg-white/5 hover:bg-danger/20 hover:text-danger text-gray-400 px-3 py-1.5 rounded transition-colors">
+                                Ban
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error("Admin Load Error", err);
+                alert("Failed to load admin data. Ensure you are logged in as admin.");
+            }
+        }
+
+        async function verifyUser(id) {
+            if (!confirm("Promote this user to Student Provider status?")) return;
+            try {
+                await fetch(`${API_URL}/admin/users/${id}/verify`, { method: 'PUT' });
+                refreshData();
+            } catch (e) { alert(e); }
+        }
+
+        async function deleteUser(id) {
+            if (!confirm("Are you sure you want to ban/delete this user? This action cannot be undone.")) return;
+            try {
+                await fetch(`${API_URL}/admin/users/${id}`, { method: 'DELETE' });
+                refreshData();
+            } catch (e) { alert(e); }
+        }
+
+        // Initial Load
+        window.addEventListener('load', refreshData);
+    </script>
+</body>
+
+</html>
