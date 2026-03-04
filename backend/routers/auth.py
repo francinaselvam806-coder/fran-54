@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from ..models import User
+import logging
 from ..database import get_database
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -7,6 +8,7 @@ from pydantic import BaseModel
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+logger = logging.getLogger(__name__)
 
 class LoginRequest(BaseModel):
     email: str
@@ -20,6 +22,7 @@ def get_password_hash(password):
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(user: User):
+    logger.info(f"Registration attempt for email: {user.email}")
     db = await get_database()
     
     # Check if user already exists
