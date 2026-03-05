@@ -3,8 +3,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from .routers import auth, services, ai, admin
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import logging
 
 app = FastAPI(title="Hyperlocal Gig Finder")
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logging.error(f"Unhandled exception: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal Server Error: {str(exc)}"},
+    )
 
 # CORS setup
 

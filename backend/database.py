@@ -2,6 +2,7 @@ import os
 import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import ConnectionFailure, OperationFailure
+from fastapi import HTTPException
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -20,10 +21,13 @@ db = client[DB_NAME]
 
 async def get_database():
     try:
-        # Verify connection
+        # Verify connection with a short timeout
         await client.admin.command('ping')
         return db
     except Exception as e:
-        logger.error(f"Database connection failed: {str(e)}")
-        # If connection fails, we might want to raise a cleaner error for FastAPI
-        raise RuntimeError(f"Could not connect to MongoDB: {str(e)}")
+        error_msg = f"MongoDB connection failed: {str(e)}"
+        logger.error(error_msg)
+        raise HTTPException(
+            status_code=503,
+            detail=f"Database connection error. Please check MONGO_URL. Error: {str(e)}"
+        )
