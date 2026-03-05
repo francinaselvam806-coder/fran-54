@@ -183,12 +183,9 @@
             }
         }
 
-        const MAIN_API = 'http://127.0.0.1:8000';
-
-
         async function checkBackendHealth() {
             try {
-                const res = await fetch(`${MAIN_API}/`);
+                const res = await fetch(`${API_URL}/`);
                 if (res.ok) {
                     document.getElementById('backendStatus').classList.add('hidden');
                 } else {
@@ -196,7 +193,7 @@
                 }
             } catch (e) {
                 console.error('Main Backend connection failed:', e);
-                document.getElementById('backendStatus').innerText = "⚠️ Main Backend Disconnected (Port 8000)";
+                document.getElementById('backendStatus').innerText = "⚠️ Backend Disconnected";
                 document.getElementById('backendStatus').classList.remove('hidden');
             }
         }
