@@ -7,13 +7,10 @@ python-multipart
 jinja2
 passlib[bcrypt]
 python-jose[cryptography]
-transformers
-torch
 scikit-learn
 pandas
 gtts
 httpx
 pymongo
-sentence-transformers
 email-validator
 dnspython
