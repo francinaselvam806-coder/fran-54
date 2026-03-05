@@ -29,7 +29,19 @@ app.add_middleware(
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "environment": os.getenv("RENDER", "local")}
+    from .database import get_database
+    db_status = "unknown"
+    try:
+        await get_database()
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"failed: {str(e)}"
+    
+    return {
+        "status": "healthy", 
+        "database": db_status,
+        "environment": os.getenv("RENDER", "local")
+    }
 
 app.include_router(auth.router)
 app.include_router(services.router)
